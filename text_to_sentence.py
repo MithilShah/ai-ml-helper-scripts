@@ -21,8 +21,27 @@
 # one line per sentence
 
 import os
+import nltk.data
+import re
 
-
-def sentencify_file (source,target):
-    with open(input) as f:
-        contents = f.read()
+sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+dir = "/home/ec2-user/SageMaker/data/pmc/"
+for filename in os.listdir(dir):
+    #print("processing"+filename)
+    with open(dir+"/"+filename) as f:
+        try:
+            contents = f.read()
+        except:
+            print("could not read "+filename)
+            continue
+        tokenized = sent_detector.tokenize(contents.strip())
+        w = open(dir+"/"+filename+"_sen","w")
+        for sentence in tokenized:
+            if sentence:
+                sentence = re.sub(' +', ' ', sentence).replace('\n','')
+                w.write(sentence+"\n")
+        w.close()
+    f.close()
+    # comment to keep original files
+    os.remove(dir+"/"+filename)
+             
