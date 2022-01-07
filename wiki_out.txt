@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/home/ec2-user/SageMaker/code/ai-ml-helper-scripts/wiki.py", line 5, in <module>
+    text = cleaner.clean_text(text)
+  File "/home/ec2-user/SageMaker/miniconda3/envs/py39/lib/python3.9/site-packages/wiki_dump_reader/cleaner.py", line 12, in clean_text
+    text = self._remove_external_links(text)
+  File "/home/ec2-user/SageMaker/miniconda3/envs/py39/lib/python3.9/site-packages/wiki_dump_reader/cleaner.py", line 72, in _remove_external_links
+    return re.sub(r'\[h[^ ]+ (.*?)\]', r'\1', text)
+  File "/home/ec2-user/SageMaker/miniconda3/envs/py39/lib/python3.9/re.py", line 210, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+MemoryError

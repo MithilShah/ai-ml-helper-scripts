@@ -28,7 +28,7 @@ sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
 
 dir = "/home/ec2-user/SageMaker/data/ncbi/"
 sentence_file = "/home/ec2-user/SageMaker/data/ncbi/sentence_file.txt"
-def process_extracted(extracted_file):
+def process_extracted(extracted_file,f):
     root = ET.parse(extracted_file).getroot()
     for body in root.findall('body'):
         for p in body.findall('p'):
@@ -37,11 +37,11 @@ def process_extracted(extracted_file):
                  for sentence in tokenized:
                      if sentence:
                          sentence = re.sub(' +', ' ', sentence).replace('\n','')
-                         f.write(sentence)
+                         f.write(sentence+"\n")
     
     
     
-def process_tar_gz_file(filename):
+def process_tar_gz_file(filename,f):
     try:
         file = tarfile.open(filename, "r:gz")
         members = file.getmembers()
@@ -50,13 +50,13 @@ def process_tar_gz_file(filename):
                 name = member.name
                 if name.endswith("xml"):
                     extracted = file.extractfile(member)
-                    process_extracted(extracted)
+                    process_extracted(extracted,f)
     except:
         print("cant process " + filename)
         return             
-
-for filename in glob.iglob(dir + '**/*.gz', recursive=True):
-     with open(sentence_file,"w") as f:
-        process_tar_gz_file(filename)
-     f.close()
+    
+with open(sentence_file,"w") as f:
+    for filename in glob.iglob(dir + '**/*.gz', recursive=True): 
+        process_tar_gz_file(filename,f)
+f.close()
         
